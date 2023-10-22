@@ -1,26 +1,29 @@
+import models.Product;
+import models.Service;
+import util.Input;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import interfaces.IPurchasable;
+import java.util.List;
+
 public class OrderService {
-
-	private Product[] products = new Product[5];
-	private Service[] services = new Service[5];
-
-	int productIndex = 0;
-	int serviceIndex = 0;
+	private List<IPurchasable> items = new ArrayList<IPurchasable>();
 
 	public void menuloop() {
 		int input;
 		do {
 			printMenu();
 			input = Input.readInt();
-			switch ( input ) {
+			switch (input) {
 				case 0: break ;
-				case 1: orderProduct(productIndex++); break ;
-				case 2: orderService(serviceIndex++); break ;
-				default: System.out.println("invalid" ); break ;
+				case 1: orderProduct(); break;
+				case 2: orderService(); break;
+				default: System.out.println("invalid"); break;
 			}
-		} while( input != 0 && (productIndex < 5) && serviceIndex < 5);
-		sortProducts();
-		sortServices();
-		finishOrder() ;
+		} while(input != 0);
+		sortItems();
+		finishOrder();
 	}
 	
 	private void printMenu() {
@@ -30,6 +33,21 @@ public class OrderService {
 		System.out.println("(2) Order service");
 	}
 	
+	private void sortItems() {	
+		Collections.sort(items);
+		
+		// for (int i = 0; i< items.size()-1; i++) {
+		//	for (int j = 0; j< items.size()-1; j++) {
+		//		if ( items[j+1] != null && items[j+1].getPrice()< items[j].getPrice()) {
+		//			Product temp = items[j + 1] ;
+		//			items[j+1] = items[ j ] ;
+		//			items[j] = temp ;
+		//		}
+		//	}
+		// }
+	}
+	
+	/*
 	private void sortProducts() {
 		for (int i = 0; i< products.length-1; i++) {
 			for (int j = 0; j< products.length-1; j++) {
@@ -53,41 +71,35 @@ public class OrderService {
 			}
 		}
 	}
-	private void orderProduct(int index) {
+	*/
+	
+	private void orderProduct() {
 		System.out.println("Name: ");
 		String l = Input.readString();
 		System.out.println("Unit price (in cents): ");
 		int p = Input.readInt();
 		System.out.println("Quantity: ");
 		int s = Input.readInt();
-		products[index] = new Product(l, p, s) ;
+		items.add(new Product(l,p,s));
 	}
 	
-	private void orderService(int index) {
+	private void orderService() {
 		System.out.println("Service type: ");
 		String l = Input.readString();
 		System.out.println("Number of persons: ");
 		int p = Input.readInt();
 		System.out.println("Hours: ");
 		int s = Input.readInt();
-		services[index] = new Service(l, p, s) ;
+		items.add(new Service(l,p,s));
 	}
 	
 	private void finishOrder() {
 		int sum = 0;
-		for (int i = 0; i < products.length; i++) {
-			if (products[i] != null) {
-				System.out.println(products[i] + " = " + formatPrice(products[i].getPrice()));
-				sum += products[i].getPrice();
-			}
+		for(IPurchasable item : items) {
+			System.out.println(item.getName() + " = " + formatPrice(item.getPrice()));
+			sum += item.getPrice();
 		}
-		for (int i = 0; i < services.length; i++) {
-			if (services[i] != null) {
-				services[i].print();
-				System.out.println(" = " + formatPrice(services[i].getPrice()));
-				sum += services[i].getPrice();
-			}
-		}
+		
 		System.out.println("Sum: "+ formatPrice(sum));
 	}
 

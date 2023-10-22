@@ -1,3 +1,4 @@
+package util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class Input {
 	public static int readInt() {
 		int result = 0;
 		String v = null;
-		try {
+		try {	
 			v = readString();
 			result = Integer.decode(v).intValue();
 		} catch(NumberFormatException e) {
