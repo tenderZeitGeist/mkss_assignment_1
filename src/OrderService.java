@@ -1,74 +1,105 @@
 import models.Order;
-import models.Product;
-import models.Service;
-import util.Input;
-import java.util.ArrayList;
-import interfaces.Purchasable;
-import java.util.List;
+import interfaces.IRenderable;
+import ui.ConsoleUI;
+import enums.OrderAction;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class OrderService {
+	/**
+	 * the order that is processed in this service
+	 */
 	private Order order;
-	private List<Order> orders = new ArrayList<Order>();
 	
-	public void menuloop() {
-		int input;
-		do {
-			printMenu();
-			input = Input.readInt();
-			switch (input) {
-				case 0: break ;
-				case 1: orderProduct(); break;
-				case 2: orderService(); break;
-				default: System.out.println("invalid"); break;
+	/**
+	 * the UI of the application, currently this is just a console application
+	 * can be changed with some real GUI later
+	 */
+	private IRenderable renderView;
+	
+	public void startService() {
+		while(true) {
+			startSession();
+			boolean result = validateNewSession();
+			if(!result) {
+				displayFarewell();
+				return;
 			}
-		} while(input != 0);
-		sortItems();
-		finishOrder();
-	}
-	
-	private void printMenu() {
-		System.out.println("Your choice?");
-		System.out.println("(0) Finish order");
-		System.out.println("(1) Order product");
-		System.out.println("(2) Order service");
-	}
-	
-	private void sortItems() {	
-		order.sortItems();
-	}
-	
-	private void orderProduct() {
-		System.out.println("Name: ");
-		String l = Input.readString();
-		System.out.println("Unit price (in cents): ");
-		int p = Input.readInt();
-		System.out.println("Quantity: ");
-		int s = Input.readInt();
-		order.addItem(new Product(l,p,s));
-	}
-	
-	private void orderService() {
-		System.out.println("Service type: ");
-		String l = Input.readString();
-		System.out.println("Number of persons: ");
-		int p = Input.readInt();
-		System.out.println("Hours: ");
-		int s = Input.readInt();
-		order.addItem(new Service(l,p,s));
-	}
-	
-	private void finishOrder() {
-		int sum = 0;
-		for(Purchasable item : order.getItems()) {
-			System.out.println(item.getName() + " = " + formatPrice(item.getPrice()));
-			sum += item.getPrice();
 		}
-		
-		System.out.println("Sum: "+ formatPrice(sum));
 	}
-
-	private String formatPrice(int priceInCent) {
-		float price = (float)priceInCent / 100f;
-		return price + "EUR";
+	
+	/**
+	 * main loop to 
+	 */
+	private void startSession() {
+		order = new Order();
+		
+		// creates the renderView to be able to display the logic
+		renderView = new ConsoleUI();
+		
+		OrderAction action = OrderAction.unknown;
+		do {
+			action = renderView.fetchAction();
+			validateAction(action);
+		} while(action != OrderAction.finish);
+	}
+	
+	/**
+	 * validates the passed action and triggers the correct handling
+	 * @param action that was entered by user / UI
+	 */
+	private void validateAction(OrderAction action) {
+		switch(action) {
+		case newProduct:
+			orderProduct();
+			break;
+		case newService:
+			orderService();
+			break;
+		case finish:
+			finishOrder();
+			break;
+		default:
+			displayInvalidInput();
+			break;
+		}
+	}
+	
+	/**
+	 * adds a new product to the order
+	 */
+	private void orderProduct() {
+		order.addItem(renderView.orderProduct());
+	}
+	
+	/**
+	 * adds a new service to the order
+	 */
+	private void orderService() {	
+		order.addItem(renderView.orderService());
+	}
+	
+	/**
+	 * displays an invalid input as an error
+	 */
+	private void displayInvalidInput() {
+		renderView.showErrorMessage("invalid input");
+	}
+	
+	private boolean validateNewSession() {
+		return renderView.validateNewSession();
+	}
+	
+	private void displayFarewell() {
+		renderView.displayFarewell();
+	}
+	
+	/**
+	 * finishes the order, for now, the order with its items is just displayed
+	 */
+	private void finishOrder() {
+		order.sortItems();
+		order.setCheckoutTimestamp(LocalDate.now(), LocalTime.now());
+		renderView.showFinishedOrder(order);
 	}
 }

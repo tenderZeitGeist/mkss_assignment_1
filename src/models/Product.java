@@ -1,10 +1,16 @@
 package models;
 
 import enums.ItemType;
-import interfaces.Purchasable;
 
 public class Product extends Purchasable {
+	/**
+	 * unit price of the product
+	 */
 	private int unitPrice;
+	
+	/**
+	 * product's quantity
+	 */
 	private int quantity;
 
 	public Product(String name, int unitPrice, int quantity) {

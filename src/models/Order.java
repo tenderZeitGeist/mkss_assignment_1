@@ -3,20 +3,16 @@ package models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import interfaces.Purchasable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Order {
 	private List<Purchasable> items;
-	private int id;
+	private LocalDate checkoutDate;
+	private LocalTime checkoutTime;
 	
-	public Order(int id) {
-		this.id = id;
+	public Order() {
 		items = new ArrayList<Purchasable>();
-	}
-	
-	public int getId() {
-		return id;
 	}
 	
 	public List<Purchasable> getItems() {
@@ -29,5 +25,24 @@ public class Order {
 	
 	public void sortItems() {
 		Collections.sort(items);
+	}
+	
+	public String getFormattedCheckoutTimestamp() {
+		if(checkoutDate == null || checkoutTime == null) return "Kein Bestelldaum verfügbar";
+		return "Ordered on " + checkoutDate + " at " + checkoutTime;
+	}
+	
+	public void setCheckoutTimestamp(LocalDate date, LocalTime time) {
+		checkoutDate = date;
+		checkoutTime = time;
+	}
+	
+	public int getSum() {
+		int sum = 0;
+		for(Purchasable item: items) {
+			sum += item.getPrice();
+		}
+		
+		return sum;
 	}
 }

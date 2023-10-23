@@ -2,7 +2,6 @@ package models;
 
 import enums.ItemType;
 import util.AppConstants;
-import interfaces.Purchasable;
 
 public class Service extends Purchasable {
 	private int hours, persons;
