@@ -1,37 +1,27 @@
 package models;
 
 import enums.ItemType;
-import interfaces.IPurchasable;
+import util.AppConstants;
+import interfaces.Purchasable;
 
-public class Service implements IPurchasable, Comparable<IPurchasable> {
-	private String name;
+public class Service extends Purchasable {
 	private int hours, persons;
-	
-	private final int basePrice = 1242;
 
 	public ItemType itemType = ItemType.service;
 	
 	public Service(String name, int persons, int hours) {
-		this.name = name;
+		super(name, ItemType.service);
 		this.persons = persons;
 		this.hours = hours;
 	}
 
-	public String getName() {
-		return name;
-	}
-
+	@Override
 	public int getPrice() {
-		return basePrice * hours * persons;
+		return AppConstants.minPrice * hours * persons;
 	}
 
 	@Override
 	public String toString() {
 		return persons + " persons for " + hours + "h of " + name;
-	}
-	
-	@Override
-	public int compareTo(IPurchasable item) {
-		return item.getPrice() - getPrice();
 	}
 }

@@ -1,15 +1,15 @@
+import models.Order;
 import models.Product;
 import models.Service;
 import util.Input;
 import java.util.ArrayList;
-import java.util.Collections;
-
-import interfaces.IPurchasable;
+import interfaces.Purchasable;
 import java.util.List;
 
 public class OrderService {
-	private List<IPurchasable> items = new ArrayList<IPurchasable>();
-
+	private Order order;
+	private List<Order> orders = new ArrayList<Order>();
+	
 	public void menuloop() {
 		int input;
 		do {
@@ -34,44 +34,8 @@ public class OrderService {
 	}
 	
 	private void sortItems() {	
-		Collections.sort(items);
-		
-		// for (int i = 0; i< items.size()-1; i++) {
-		//	for (int j = 0; j< items.size()-1; j++) {
-		//		if ( items[j+1] != null && items[j+1].getPrice()< items[j].getPrice()) {
-		//			Product temp = items[j + 1] ;
-		//			items[j+1] = items[ j ] ;
-		//			items[j] = temp ;
-		//		}
-		//	}
-		// }
+		order.sortItems();
 	}
-	
-	/*
-	private void sortProducts() {
-		for (int i = 0; i< products.length-1; i++) {
-			for (int j = 0; j< products.length-1; j++) {
-				if ( products[j+1] != null && products[j+1].getPrice()< products[j].getPrice()) {
-					Product temp = products[j + 1] ;
-					products[j+1] = products[ j ] ;
-					products[j] = temp ;
-				}
-			}
-		}
-	}
-
-	private void sortServices() {
-		for (int i = 0; i< services.length-1; i++) {
-			for (int j = 0; j< services.length-1; j++) {
-				if ( services[j+1] != null && services[j+1].getPrice()< services[j].getPrice()) {
-					Service temp = services[j + 1] ;
-					services[j+1] = services[ j ] ;
-					services[j] = temp ;
-				}
-			}
-		}
-	}
-	*/
 	
 	private void orderProduct() {
 		System.out.println("Name: ");
@@ -80,7 +44,7 @@ public class OrderService {
 		int p = Input.readInt();
 		System.out.println("Quantity: ");
 		int s = Input.readInt();
-		items.add(new Product(l,p,s));
+		order.addItem(new Product(l,p,s));
 	}
 	
 	private void orderService() {
@@ -90,12 +54,12 @@ public class OrderService {
 		int p = Input.readInt();
 		System.out.println("Hours: ");
 		int s = Input.readInt();
-		items.add(new Service(l,p,s));
+		order.addItem(new Service(l,p,s));
 	}
 	
 	private void finishOrder() {
 		int sum = 0;
-		for(IPurchasable item : items) {
+		for(Purchasable item : order.getItems()) {
 			System.out.println(item.getName() + " = " + formatPrice(item.getPrice()));
 			sum += item.getPrice();
 		}
@@ -104,7 +68,7 @@ public class OrderService {
 	}
 
 	private String formatPrice(int priceInCent) {
-		return (priceInCent / 100) + "." + (priceInCent % 100 < 10 ? "0" : "")
-			+ priceInCent % 100 + " EUR";
+		float price = (float)priceInCent / 100f;
+		return price + "EUR";
 	}
 }

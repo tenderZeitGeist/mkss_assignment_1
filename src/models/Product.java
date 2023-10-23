@@ -1,24 +1,19 @@
 package models;
 
 import enums.ItemType;
-import interfaces.IPurchasable;
+import interfaces.Purchasable;
 
-public class Product implements IPurchasable {
-	private String name;
+public class Product extends Purchasable {
 	private int unitPrice;
 	private int quantity;
-	public ItemType itemType = ItemType.product;
 
 	public Product(String name, int unitPrice, int quantity) {
-		this.name = name;
+		super(name, ItemType.product);
 		this.unitPrice = unitPrice;
 		this.quantity = quantity;
 	}
-
-	public String getName() {
-		return name;
-	}
 	
+	@Override
 	public int getPrice() {
 		return unitPrice * quantity;
 	}
@@ -26,10 +21,5 @@ public class Product implements IPurchasable {
 	@Override
 	public String toString() {
 		return quantity + " * " + name;
-	}
-	
-	@Override
-	public int compareTo(IPurchasable item) {
-		return item.getPrice() - getPrice();
 	}
 }
