@@ -13,7 +13,6 @@ public class ConsoleUI implements IRenderable {
 	/**
 	 * handles a new product and handles it
 	 */
-	@Override
 	public Product orderProduct() {
 		System.out.println("[Product] Name: ");
 		String name = Input.readString();
@@ -30,7 +29,6 @@ public class ConsoleUI implements IRenderable {
 	/**
 	 * handles a new service and returns it
 	 */
-	@Override
 	public Service orderService() {
 		System.out.println("[Service] Type: ");
 		String type = Input.readString();
@@ -47,7 +45,6 @@ public class ConsoleUI implements IRenderable {
 	/**
 	 * provides menu with all interactions in the console
 	 */
-	@Override
 	public void showMenu() {
 		System.out.println("Your choice?");
 		System.out.println("(0) Finish order");
@@ -58,7 +55,6 @@ public class ConsoleUI implements IRenderable {
 	/**
 	 * displays the finished order, sums up all items with their prices, show sum at the end
 	 */
-	@Override
 	public void showFinishedOrder(Order order) {
 		for(Purchasable item : order.getItems()) {
 			System.out.println(item.getName() + " = " + Formatter.formatPrice(item.getPrice()));
@@ -71,7 +67,6 @@ public class ConsoleUI implements IRenderable {
 	/**
 	 * displays the passed message as error
 	 */
-	@Override
 	public void showErrorMessage(String message) {
 		System.err.println(message);
 	}
@@ -79,7 +74,6 @@ public class ConsoleUI implements IRenderable {
 	/**
 	 * handles the user input to identify the current action
 	 */
-	@Override
 	public OrderAction fetchAction() {
 		showMenu();
 		int input = Input.readInt();
@@ -95,7 +89,6 @@ public class ConsoleUI implements IRenderable {
 		}
 	}
 	
-	@Override
 	public boolean validateNewSession() {
 		System.out.println("Möchtest du eine weitere Bestellung tätigen");
 		return Input.readBoolean();
