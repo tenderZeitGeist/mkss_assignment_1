@@ -29,7 +29,7 @@ public class OrderService {
 	}
 	
 	/**
-	 * main loop to 
+	 * starts a new session to enter a new order
 	 */
 	private void startSession() {
 		order = new Order();
