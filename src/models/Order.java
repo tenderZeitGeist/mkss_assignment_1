@@ -38,11 +38,6 @@ public class Order {
 	}
 	
 	public int getSum() {
-		int sum = 0;
-		for(Purchasable item: items) {
-			sum += item.getPrice();
-		}
-		
-		return sum;
+		return items.stream().map(Purchasable::getPrice).reduce(0, Integer::sum);
 	}
 }
