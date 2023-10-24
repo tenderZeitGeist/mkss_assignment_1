@@ -27,13 +27,11 @@ public abstract class Purchasable implements Comparable<Purchasable> {
 	}
 	
 	/**
-	 * returns the price of the purchasable
+	 * returns the price of the purchasable. Has to be defined by implementing class.
 	 * @return
 	 */
-	public int getPrice() {
-		return 0;
-	}
-	
+	abstract public int getPrice();
+
 	/**
 	 * returns the type of the purchasable
 	 * @return
