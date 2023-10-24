@@ -28,7 +28,7 @@ public class Order {
 	}
 	
 	public String getFormattedCheckoutTimestamp() {
-		if(checkoutDate == null || checkoutTime == null) return "Kein Bestelldaum verfügbar";
+		if(checkoutDate == null || checkoutTime == null) return "Kein Bestelldatum verfügbar";
 		return "Ordered on " + checkoutDate + " at " + checkoutTime;
 	}
 	
