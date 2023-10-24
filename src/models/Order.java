@@ -28,7 +28,7 @@ public class Order {
 	}
 	
 	public String getFormattedCheckoutTimestamp() {
-		if(checkoutDate == null || checkoutTime == null) return "Kein Bestelldaum verfügbar";
+		if(checkoutDate == null || checkoutTime == null) return "Kein Bestelldatum verfügbar";
 		return "Ordered on " + checkoutDate + " at " + checkoutTime;
 	}
 	
@@ -38,11 +38,6 @@ public class Order {
 	}
 	
 	public int getSum() {
-		int sum = 0;
-		for(Purchasable item: items) {
-			sum += item.getPrice();
-		}
-		
-		return sum;
+		return items.stream().map(Purchasable::getPrice).reduce(0, Integer::sum);
 	}
 }

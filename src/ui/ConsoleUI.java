@@ -90,11 +90,20 @@ public class ConsoleUI implements IRenderable {
 	}
 	
 	public boolean validateNewSession() {
-		System.out.println("Möchtest du eine weitere Bestellung tätigen");
-		return Input.readBoolean();
+		String input;
+		while(true) {
+			System.out.println("Möchtest Du eine weitere Bestellung tätigen? [j/n]");
+			input = Input.readString();
+			final boolean yesCase = input.equalsIgnoreCase("J");
+			final boolean noCase = input.equalsIgnoreCase("N");
+			if(!(yesCase || noCase)) {
+				continue;
+			}
+			return yesCase;
+		}
 	}
 	
 	public void displayFarewell() {
-		System.out.println("Vielen Dank für deinen Einkauf! Beehre uns bald wieder!");
+		System.out.println("Vielen Dank für Deinen Einkauf! Beehre uns bald wieder!");
 	}
 }
